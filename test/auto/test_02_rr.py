@@ -1,0 +1,33 @@
+# -*- coding:utf-8 -*-
+#
+# Copyright (c) 2021 Alibaba Group Holding Limited
+# Express UDP is licensed under Mulan PSL v2.
+# You can use this software according to the terms and conditions of the Mulan PSL v2.
+# You may obtain a copy of Mulan PSL v2 at:
+#          http://license.coscl.org.cn/MulanPSL2
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+# EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+# MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v2 for more details.
+#
+
+
+
+import socket
+import xudp
+from collections import defaultdict
+
+def test_rr(proc):
+    pids = defaultdict(int)
+
+    udp = xudp.get_con()
+
+    for i in range(10000):
+        udp.send('pid')
+        pid = udp.recv(100)
+        pids[pid] += 1
+
+    vs = pids.values()
+
+    for v in vs:
+        assert abs(v - 1000) < 10
